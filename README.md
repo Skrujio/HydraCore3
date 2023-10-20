@@ -1,24 +1,44 @@
 # HydraCore3
 Modern rendering core: spec, vulkan (by kernel_slicer) and other
 
-# Build (CPU)
+## Build (CPU)
 1) clone this repo with all its submodules
-   * git clone --recurse-submodules git@github.com:Ray-Tracing-Systems/HydraCore3.git
-   * or use git submodule init && git submodule apdate after clone
+   
+   ```markdown 
+   git clone --recurse-submodules https://github.com/Ray-Tracing-Systems/HydraCore3.git
+   ```
+
+   or use
+
+   ```markdown
+   git clone https://github.com/Ray-Tracing-Systems/HydraCore3.git
+   git submodule init && git submodule update
+   ```
+
 2) Disable Vulkan by '-DUSE_VULKAN=OFF'
 3) Build normally with Cmake 
 
-# Build (CPU and GPU) [Linux only for now]
+## Build (CPU and GPU) [Linux only for now]
 1) clone https://github.com/Ray-Tracing-Systems/kernel_slicer
 2) Build kernel_slicer
 3) clone this repo with all its submodules
-   * git clone --recurse-submodules git@github.com:Ray-Tracing-Systems/HydraCore3.git
-   * or use git submodule init && git submodule apdate after clone
+
+   ```markdown
+   git clone --recurse-submodules https://github.com/Ray-Tracing-Systems/HydraCore3.git
+   ```
+
+   or use
+
+   ```markdown
+   git clone https://github.com/Ray-Tracing-Systems/HydraCore3.git
+   git submodule init && git submodule update
+   ```
+
 4) run kernel_slicer with 'Launch (HydraCore3/GLSL/External)' config
 5) build shaders (by calling 'shaders_generated/build.sh')
 6) build solution normally with CMake
 
-# Development pipeline
+## Development pipeline
 1) Select/Find/Make a reference image to you feature
 2) Implement it in renderer on CPU
 3) run kernel_slicer to get GPU version and be sure that code succesefully transformed to shaders
