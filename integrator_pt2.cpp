@@ -231,4 +231,6 @@ void Integrator::GetExecutionTime(const char* a_funcName, float a_out[4])
     a_out[0] = shadowPtTime;
   else if(std::string(a_funcName) == "RayTrace" || std::string(a_funcName) == "RayTraceBlock")
     a_out[0] = raytraceTime;
+  else if(std::string(a_funcName) == "RayDiffTraceBlock")
+    a_out[0] = raydiffTime;
 }

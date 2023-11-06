@@ -219,6 +219,32 @@ int main(int argc, const char** argv)
     }
   }
 
+  if (integratorType == "raydiff") {
+    PASS_NUMBER = 1;               // must be always one for RT currently
+    const float normConstRT = 1.0f;  // must be always one for RT currently
+    std::cout << "[main]: RayDiffBlock ... " << std::endl;
+
+    std::fill(realColor.begin(), realColor.end(), LiteMath::float4{});
+   
+    pImpl->UpdateMembersPlainData();
+    pImpl->RayDiffTraceBlock(WIN_WIDTH*WIN_HEIGHT, realColor.data(), PASS_NUMBER);
+
+    pImpl->GetExecutionTime("RayDiffTraceBlock", timings);
+    std::cout << "RayDiffTraceBlock(exec) = " << timings[0]              << " ms " << std::endl;
+    std::cout << "RayDiffTraceBlock(copy) = " << timings[1] + timings[2] << " ms " << std::endl;
+    std::cout << "RayDiffTraceBlock(ovrh) = " << timings[3]              << " ms " << std::endl;
+
+    if(saveHDR)
+    {
+      const std::string outName = (integratorType == "raydiff") ? imageOut : imageOutClean + "_rd.exr";
+      SaveImage4fToEXR((const float*)realColor.data(), WIN_WIDTH, WIN_HEIGHT, outName.c_str(), normConstRT, true);
+    }
+    else
+    {
+      const std::string outName = (integratorType == "raydiff") ? imageOut : imageOutClean + "_rd.bmp";
+      SaveImage4fToBMP((const float*)realColor.data(), WIN_WIDTH, WIN_HEIGHT, outName.c_str(), normConstRT, gamma);
+    }
+  }
 
   return 0;
 }

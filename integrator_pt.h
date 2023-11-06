@@ -60,6 +60,57 @@ public:
   virtual void PathTraceBlock(uint tid, float4* out_color, uint a_passNum);
   virtual void RayTraceBlock(uint tid, float4* out_color, uint a_passNum);
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //ray diffential functions begin
+  
+  
+  virtual void RayDiffTraceBlock(uint tid, float4* out_color, uint a_passNum);
+  void RayDiffTrace(uint tid, float4* out_color);
+  
+  struct RayData {
+    float4 PosAndNear;
+    float4 DirAndFar;
+    uint   Flags = 0;
+  };
+
+  struct RayDiffData {
+    RayData prime;
+    RayData dx;
+    RayData dy;
+  };
+
+  struct AccumData {
+    float4 Color;
+    float4 Throughput;
+  };
+
+  struct HitData {
+    float4 Part1;
+    float4 Part2;
+    uint instId;
+  };
+
+  struct HitDiffData {
+    HitData prime;
+    HitData dx;
+    HitData dy;
+  };
+  
+  void InitEyeRayData(uint tid, RayData& ray, AccumData& accum);
+  void InitEyeRayDiffData(uint tid, RayDiffData& rayDiff, AccumData& accum);
+  void RayDiffTrace(uint tid, RayData prime, RayData dx, RayData dy, float4* out_hit1, float4* out_hit2);
+  RayData GetRayData(float3 rayPos, float3 rayDir);
+  void InitRayData(RayData& ray, float3 rayPos, uint x, uint y);
+  void InitEyeRayDiff(uint tid, RayDiffData& ray, AccumData& accum);
+  void RayTrace2Wrapper(uint tid, RayData& ray, HitData& hit);
+  SurfaceHit UnpackHitData(HitData hit);
+  void ProcessLightSource(uint32_t matId, RayData& ray, SurfaceHit hit, AccumData& accum);
+  float4 ProcessShaderColor(float4 shadeColor, SurfaceHit hit, uint matId, float3 ray_dir);
+  void RayDiffBounce(uint tid, uint depth, RayDiffData& ray, HitDiffData& hit, AccumData& accum);
+
+  //ray diffential functions end
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   virtual void CommitDeviceData() {}                                     // will be overriden in generated class
   virtual void GetExecutionTime(const char* a_funcName, float a_out[4]); // will be overriden in generated class
 
@@ -202,6 +253,7 @@ protected:
   float naivePtTime  = 0.0f;
   float shadowPtTime = 0.0f;
   float raytraceTime = 0.0f;
+  float raydiffTime = 0.0f;
 
   //// textures
   //
